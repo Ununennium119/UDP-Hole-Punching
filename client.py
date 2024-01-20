@@ -37,7 +37,7 @@ class Client:
             receive_data, address = self.socket.recvfrom(self.BUFFER_SIZE)
             dest_ip = receive_data.decode()
 
-            self.socket.sendto("", (dest_ip, self.dest_port))
+            self.socket.sendto(bytes(), (dest_ip, self.dest_port))
 
             send_message_thread = threading.Thread(target=self.send_message, args=dest_ip)
             listen_message_thread = threading.Thread(target=self.listen_message)
@@ -53,7 +53,7 @@ class Client:
     def send_message(self, dest_ip: str):
         while True:
             message = input('Enter message: \n')
-            self.socket.sendto(message, (dest_ip, self.dest_port))
+            self.socket.sendto(message.encode(), (dest_ip, self.dest_port))
 
     def listen_message(self):
         while True:
