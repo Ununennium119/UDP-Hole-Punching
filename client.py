@@ -1,6 +1,7 @@
 import socket
 import sys
 import threading
+import time
 
 
 class Client:
@@ -38,6 +39,7 @@ class Client:
             dest_ip = receive_data.decode()
 
             self.socket.sendto(bytes(), (dest_ip, self.dest_port))
+            time.sleep(0.25)
 
             send_message_thread = threading.Thread(target=self.send_message, args=(dest_ip,))
             listen_message_thread = threading.Thread(target=self.listen_message)
