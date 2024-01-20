@@ -22,7 +22,6 @@ class Client:
         self.dest_id: int = dest_id
         self.dest_port: int = dest_port
         self.socket: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.send_socket: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     def run(self):
         self.socket.bind(self.address)
@@ -32,13 +31,13 @@ class Client:
             send_data = bytearray()
             send_data.extend(self.self_id.to_bytes(4, 'big'))
             send_data.extend(self.dest_id.to_bytes(4, 'big'))
-            self.send_socket.sendto(send_data, self.stun_address)
+            self.socket.sendto(send_data, self.stun_address)
 
             print('Waiting for response from stun server...')
             receive_data, address = self.socket.recvfrom(self.BUFFER_SIZE)
             dest_ip = receive_data.decode()
 
-            self.send_socket.sendto("", (dest_ip, self.dest_port))
+            self.socket.sendto("", (dest_ip, self.dest_port))
 
             send_message_thread = threading.Thread(target=self.send_message, args=dest_ip)
             listen_message_thread = threading.Thread(target=self.listen_message)
