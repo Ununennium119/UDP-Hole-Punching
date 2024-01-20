@@ -39,7 +39,7 @@ class Client:
 
             self.socket.sendto(bytes(), (dest_ip, self.dest_port))
 
-            send_message_thread = threading.Thread(target=self.send_message, args=dest_ip)
+            send_message_thread = threading.Thread(target=self.send_message, args=(dest_ip,))
             listen_message_thread = threading.Thread(target=self.listen_message)
             send_message_thread.start()
             listen_message_thread.start()
