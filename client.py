@@ -7,14 +7,14 @@ class Client:
     BUFFER_SIZE: int = 1024
 
     def __init__(
-            self,
-            host: str,
-            port: int,
-            stun_host: str,
-            stun_port: int,
-            self_id: int,
-            dest_id: int,
-            dest_port: int
+        self,
+        host: str,
+        port: int,
+        stun_host: str,
+        stun_port: int,
+        self_id: int,
+        dest_id: int,
+        dest_port: int
     ):
         self.address: tuple[str, int] = (host, port)
         self.stun_address: tuple[str, int] = (stun_host, stun_port)
@@ -22,6 +22,7 @@ class Client:
         self.dest_id: int = dest_id
         self.dest_port: int = dest_port
         self.socket: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.send_socket: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     def run(self):
         self.socket.bind(self.address)
@@ -31,13 +32,13 @@ class Client:
             send_data = bytearray()
             send_data.extend(self.self_id.to_bytes(4, 'big'))
             send_data.extend(self.dest_id.to_bytes(4, 'big'))
-            self.socket.sendto(send_data, self.stun_address)
+            self.send_socket.sendto(send_data, self.stun_address)
 
             print('Waiting for response from stun server...')
             receive_data, address = self.socket.recvfrom(self.BUFFER_SIZE)
             dest_ip = receive_data.decode()
 
-            self.socket.sendto("", (dest_ip, self.dest_port))
+            self.send_socket.sendto("", (dest_ip, self.dest_port))
 
             send_message_thread = threading.Thread(target=self.send_message, args=dest_ip)
             listen_message_thread = threading.Thread(target=self.listen_message)
