@@ -69,7 +69,7 @@ def main():
     self_id = int(sys.argv[4])
     dest_id = int(sys.argv[5])
     dest_port = int(sys.argv[6])
-    client = Client('localhost', port, stun_host, stun_port, self_id, dest_id, dest_port)
+    client = Client('0.0.0.0', port, stun_host, stun_port, self_id, dest_id, dest_port)
     client.run()
 
 
