@@ -39,8 +39,9 @@ class StunServer:
 
 
 def main():
-    port = int(sys.argv[1])
-    stun_server = StunServer('localhost', port)
+    host = sys.argv[1]
+    port = int(sys.argv[2])
+    stun_server = StunServer(host, port)
     stun_server.run()
 
 
