@@ -25,8 +25,14 @@ class StunServer:
                 self.id_address_map[source_id] = address
                 if self.ids_map.get(dest_id) == source_id:
                     print(f'Sending ips to ids {source_id} and {dest_id}')
-                    self.socket.sendto(self.id_address_map[dest_id][0].encode(), self.id_address_map[source_id])
-                    self.socket.sendto(self.id_address_map[source_id][0].encode(), self.id_address_map[dest_id])
+                    self.socket.sendto(
+                        f'{self.id_address_map[dest_id][0]}|{self.id_address_map[dest_id][1]}'.encode(),
+                        self.id_address_map[source_id]
+                    )
+                    self.socket.sendto(
+                        f'{self.id_address_map[source_id][0]}|{self.id_address_map[source_id][1]}'.encode(),
+                        self.id_address_map[dest_id]
+                    )
                     self.ids_map.pop(dest_id)
                 else:
                     print(f'Saving source id: {source_id} and dest id: {dest_id}')
